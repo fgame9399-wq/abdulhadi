@@ -1,0 +1,86 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile information for the authenticated building owner",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Firebase Auth UID of the owner"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the owner"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the owner"
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "Optional avatar URL"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last profile update"
+        }
+      },
+      "required": ["id", "email", "updatedAt"]
+    },
+    "BuildingData": {
+      "title": "BuildingData",
+      "description": "Comprehensive building data including settings, apartments list, and cycles",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the building record matching owner userId"
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the owner"
+        },
+        "settings": {
+          "type": "object",
+          "description": "Building settings including name, owner phone, currency, and rates"
+        },
+        "apartments": {
+          "type": "array",
+          "description": "List of apartments in the building"
+        },
+        "cycles": {
+          "type": "array",
+          "description": "List of monthly billing and accounting cycles"
+        },
+        "activeCycleId": {
+          "type": "string",
+          "description": "ID of the currently active cycle"
+        },
+        "version": {
+          "type": "number",
+          "description": "Data schema version"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of the last save"
+        }
+      },
+      "required": ["id", "ownerId", "settings", "apartments", "cycles", "activeCycleId", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Stores private user profile details for each authenticated owner"
+    },
+    "/buildings/{userId}": {
+      "schema": {
+        "$ref": "#/entities/BuildingData"
+      },
+      "description": "Stores all building data, apartments, accounting cycles, and meter records owned by the user"
+    }
+  }
+}
